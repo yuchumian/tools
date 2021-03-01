@@ -77,20 +77,12 @@ public class ExcelUtils {
         if(Objects.isNull(file)){
             return "";
         }
-        String fileType = getFileType(file);
-        HSSFWorkbook excelBook = new HSSFWorkbook();
-        if (!XLS.equals(fileType) && !XLSX.equals(fileType)) {
+        HSSFWorkbook excelBook = buildHssfWorkbook(file);
+        if (excelBook == null) {
             return "";
-        }
-        if(XLS.equals(fileType)){
-            excelBook = new HSSFWorkbook(new FileInputStream(file));
-        }
-        if(XLSX.equals(fileType)){
-            xlsxToXls(file, excelBook);
         }
         return excelToHtml(excelBook);
     }
-
 
 
     /**
@@ -113,6 +105,21 @@ public class ExcelUtils {
             e.printStackTrace();
         }
         return content;
+    }
+
+    private static HSSFWorkbook buildHssfWorkbook(File file) throws IOException {
+        String fileType = getFileType(file);
+        HSSFWorkbook excelBook = new HSSFWorkbook();
+        if (!XLS.equals(fileType) && !XLSX.equals(fileType)) {
+            return null;
+        }
+        if(XLS.equals(fileType)){
+            excelBook = new HSSFWorkbook(new FileInputStream(file));
+        }
+        if(XLSX.equals(fileType)){
+            xlsxToXls(file, excelBook);
+        }
+        return excelBook;
     }
 
     private static String getFileType(File file) {
