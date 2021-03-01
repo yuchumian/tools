@@ -47,11 +47,9 @@ public class ExcelUtils {
     public <T> void writer(List<T> list, OutputStream out, Class<T> clazz, int... mergeColumnIndex) {
         ExcelWriterBuilder writerBuilder = EasyExcel.write(out, clazz);
         if (ArrayUtils.isNotEmpty(mergeColumnIndex)) {
-            writerBuilder.registerWriteHandler(new ExcelMergeStrategy(list.size(), mergeColumnIndex)).build();
+            writerBuilder.registerWriteHandler(new ExcelMergeStrategy(list.size(), mergeColumnIndex));
         }
-        writerBuilder
-                .sheet("sheet1")
-                .doWrite(list);
+        writerBuilder.sheet("sheet1").doWrite(list);
     }
 
     /**
